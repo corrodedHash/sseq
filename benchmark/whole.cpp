@@ -6,7 +6,7 @@ static void BM_Whole(benchmark::State& state)
 {
   for (auto _ : state) {
     graph test;
-    for (int i = 0; i < 30; ++i) {
+    for (int i = 0; i < state.range(0); ++i) {
       test.nodes.emplace_back();
       for (int j = 0; j < i; ++j) {
         if (is_square_num(i + j + 2)) {
@@ -21,7 +21,7 @@ static void BM_GraphGen(benchmark::State& state)
 {
   for (auto _ : state) {
     graph test;
-    for (int i = 0; i < 30; ++i) {
+    for (int i = 0; i < state.range(0); ++i) {
       test.nodes.emplace_back();
       for (int j = 0; j < i; ++j) {
         if (is_square_num(i + j + 2)) {
@@ -35,7 +35,7 @@ static void BM_GraphGen(benchmark::State& state)
 static void BM_PathFind(benchmark::State& state)
 {
   graph test;
-  for (int i = 0; i < 30; ++i) {
+  for (int i = 0; i < state.range(0); ++i) {
     test.nodes.emplace_back();
     for (int j = 0; j < i; ++j) {
       if (is_square_num(i + j + 2)) {
@@ -44,10 +44,11 @@ static void BM_PathFind(benchmark::State& state)
     }
   }
   for (auto _ : state) {
-    auto x = test.has_path();
+    benchmark::DoNotOptimize(test.has_path());
   }
+  state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(BM_Whole);
-BENCHMARK(BM_GraphGen);
-BENCHMARK(BM_PathFind);
+BENCHMARK(BM_Whole)->Arg(30);
+BENCHMARK(BM_GraphGen)->Arg(30);
+BENCHMARK(BM_PathFind)->RangeMultiplier(2)->Range(1, 32)->Complexity();

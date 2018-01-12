@@ -45,7 +45,7 @@ if (SSEQ_TIDY_CHECK)
 endif()
 
 add_subdirectory(lib)
-#add_subdirectory(test)
+add_subdirectory(test)
 add_subdirectory(tools)
 if (SSEQ_BENCHMARKS)
   add_subdirectory(benchmark)

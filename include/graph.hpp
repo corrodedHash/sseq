@@ -2,7 +2,7 @@
 #include <vector>
 #include "setvec.hpp"
 struct graphnode {
-  std::vector<int> neighbors;
+  std::vector<int> neighbors = std::vector<int>(5);
 };
 
 struct graph {
