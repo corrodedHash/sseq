@@ -29,7 +29,6 @@ static void BM_GraphGen(benchmark::State& state)
         }
       }
     }
-    auto x = test.has_path();
   }
 }
 static void BM_PathFind(benchmark::State& state)
@@ -49,6 +48,6 @@ static void BM_PathFind(benchmark::State& state)
   state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(BM_Whole)->Arg(30);
-BENCHMARK(BM_GraphGen)->Arg(30);
+BENCHMARK(BM_Whole)->RangeMultiplier(2)->Range(1, 32);
+BENCHMARK(BM_GraphGen)->RangeMultiplier(2)->Range(1, 32);
 BENCHMARK(BM_PathFind)->RangeMultiplier(2)->Range(1, 32)->Complexity();
