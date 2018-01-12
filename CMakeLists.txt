@@ -44,7 +44,7 @@ if (SSEQ_TIDY_CHECK)
   -clang-diagnostic-unused-command-line-argument")
 endif()
 
-#add_subdirectory(lib)
+add_subdirectory(lib)
 #add_subdirectory(test)
 add_subdirectory(tools)
 if (SSEQ_BENCHMARKS)
