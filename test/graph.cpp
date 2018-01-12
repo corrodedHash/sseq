@@ -1,6 +1,7 @@
 #include "graph.hpp"
 #include "catch.hpp"
 #include "util.hpp"
+#include <iostream>
 
 TEST_CASE("I guess")
 {
@@ -13,6 +14,7 @@ TEST_CASE("I guess")
       }
     }
   }
+  std::cout << test.dump();
   auto x = test.has_path();
   REQUIRE(x);
   for (decltype(x->_vec.size()) i = 0; i < x->_vec.size() - 1; ++i) {
