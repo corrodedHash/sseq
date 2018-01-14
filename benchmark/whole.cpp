@@ -31,27 +31,10 @@ static void BM_PathFindStandard(benchmark::State& state)
 {
   auto test = createGraph(state.range(0));
   for (auto _ : state) {
-    benchmark::DoNotOptimize(test.has_path_standard());
-  }
-}
-static void BM_PathFindCMS(benchmark::State& state)
-{
-  auto test = createGraph(state.range(0));
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(test.has_path_cms());
-  }
-}
-
-static void BM_CreateSolver(benchmark::State& state)
-{
-  auto test = createGraph(state.range(0));
-  for (auto _ : state) {
-    benchmark::DoNotOptimize(test.create_solver());
+    benchmark::DoNotOptimize(test.has_path());
   }
 }
 
 BENCHMARK(BM_Whole)->RangeMultiplier(2)->Range(1, 32);
 BENCHMARK(BM_GraphGen)->RangeMultiplier(2)->Range(1, 32);
 BENCHMARK(BM_PathFindStandard)->RangeMultiplier(2)->Range(1, 32);
-BENCHMARK(BM_PathFindCMS)->RangeMultiplier(2)->Range(1, 32);
-BENCHMARK(BM_CreateSolver)->RangeMultiplier(2)->Range(1, 32);

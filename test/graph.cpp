@@ -14,12 +14,9 @@ TEST_CASE("I guess")
       }
     }
   }
-  //std::cout << test.dump();
-  REQUIRE(test.has_path_standard());
-  REQUIRE(test.has_path());
-  /*
-  for (decltype(x->_vec.size()) i = 0; i < x->_vec.size() - 1; ++i) {
-    REQUIRE(is_square_num(x->_vec[i] + x->_vec[i + 1] + 2));
+  auto x = test.has_path();
+  REQUIRE(x);
+  for (decltype(x->size()) i = 0; i < x->size() - 1; ++i) {
+    REQUIRE(is_square_num((*x)[i] + (*x)[i + 1] + 2));
   }
-  */
 }

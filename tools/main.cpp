@@ -15,27 +15,13 @@ int main(int argc, char** args)
         test.add_bi_edge(i, j);
       }
     }
-    /*
-       if (auto x = test.has_path(); x) {
-      std::cout << i + 1 << ":  ";
-      for (auto j : x->_vec) {
-        std::cout << j + 1 << " ";
-      }
-      std::cout << "\n";
-    }
-  */
-    bool a = test.has_path_standard() ? true : false;
-    bool b = test.has_path_cms();
+    bool a = static_cast<bool>(test.has_path());
     if (a) {
       std::cout << i + 1 << " ";
     } else {
       std::cout << "-" << i + 1 << " ";
     }
-    if (b) {
-      std::cout << i + 1 << "\n";
-    } else {
-      std::cout << "-" << i + 1 << "\n";
-    }
+    std::cout << "\n";
   }
   return 0;
 }

@@ -3,7 +3,7 @@
 #include <cryptominisat5/cryptominisat.h>
 #include <iostream>
 
-std::optional<std::vector<int>> graph::has_path_standard()
+std::optional<std::vector<int>> graph::has_path()
 {
   std::vector<int> visited;
   visited.emplace_back(0);
@@ -34,74 +34,4 @@ std::optional<std::vector<int>> graph::has_path_standard()
     }
   }
   return visited;
-}
-
-CMSat::SATSolver graph::create_solver()
-{
-  CMSat::SATSolver solver;
-  std::vector<CMSat::Lit> clause;
-  solver.new_vars(nodes.size() * nodes.size());
-  // Every node has to appear in the path
-  for (int node = 0; node < nodes.size(); ++node) {
-    for (int place = 0; place < nodes.size(); ++place) {
-      clause.emplace_back(CMSat::Lit(place * nodes.size() + node, false));
-    }
-    solver.add_clause(clause);
-    clause.clear();
-  }
-  // In every place of the path a node has to appear
-  for (int place = 0; place < nodes.size(); ++place) {
-    for (int node = 0; node < nodes.size(); ++node) {
-      clause.emplace_back(CMSat::Lit(place * nodes.size() + node, false));
-    }
-    solver.add_clause(clause);
-    clause.clear();
-  }
-  // No node appears twice in the path
-  for (int node = 0; node < nodes.size(); ++node) {
-    for (int place1 = 0; place1 < nodes.size(); ++place1) {
-      for (int place2 = place1 + 1; place2 < nodes.size(); ++place2) {
-        clause.emplace_back(CMSat::Lit(place1 * nodes.size() + node, true));
-        clause.emplace_back(CMSat::Lit(place2 * nodes.size() + node, true));
-        solver.add_clause(clause);
-        clause.clear();
-      }
-    }
-  }
-  // No two nodes occupy the same place in the path
-  for (int place = 0; place < nodes.size(); ++place) {
-    for (int node1 = 0; node1 < nodes.size(); ++node1) {
-      for (int node2 = node1 + 1; node2 < nodes.size(); ++node2) {
-        clause.emplace_back(CMSat::Lit(place * nodes.size() + node1, true));
-        clause.emplace_back(CMSat::Lit(place * nodes.size() + node2, true));
-        solver.add_clause(clause);
-        clause.clear();
-      }
-    }
-  }
-  // Nonadjacent nodes cannot be adjacent in the path
-  for (int node1 = 0; node1 < nodes.size(); ++node1) {
-    for (int place = 0; place < nodes.size() - 1; ++place) {
-      for (int node2 = 0; node2 < nodes.size(); ++node2) {
-        if (std::find(nodes[node1].neighbors.begin(), nodes[node1].neighbors.end(), node2) == std::end(nodes[node1].neighbors)) {
-          clause.emplace_back(CMSat::Lit(place * nodes.size() + node1, true));
-          clause.emplace_back(CMSat::Lit((place + 1) * nodes.size() + node2, true));
-          solver.add_clause(clause);
-          clause.clear();
-        }
-      }
-    }
-  }
-  return solver;
-}
-
-bool graph::has_path_cms()
-{
-  auto x = create_solver().solve();
-  return x == CMSat::l_True;
-}
-
-bool graph::has_path()
-{
-  return has_path_cms();
 }
