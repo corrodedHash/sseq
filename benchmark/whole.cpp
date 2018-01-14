@@ -2,39 +2,10 @@
 #include "util.hpp"
 #include <benchmark/benchmark.h>
 
-static void BM_Whole(benchmark::State& state)
-{
-  for (auto _ : state) {
-    graph test;
-    for (int i = 0; i < state.range(0); ++i) {
-      test.nodes.emplace_back();
-      for (int j = 0; j < i; ++j) {
-        if (is_square_num(i + j + 2)) {
-          test.add_bi_edge(i, j);
-        }
-      }
-    }
-    auto x = test.has_path();
-  }
-}
-static void BM_GraphGen(benchmark::State& state)
-{
-  for (auto _ : state) {
-    graph test;
-    for (int i = 0; i < state.range(0); ++i) {
-      test.nodes.emplace_back();
-      for (int j = 0; j < i; ++j) {
-        if (is_square_num(i + j + 2)) {
-          test.add_bi_edge(i, j);
-        }
-      }
-    }
-  }
-}
-static void BM_PathFind(benchmark::State& state)
+static graph createGraph(int size)
 {
   graph test;
-  for (int i = 0; i < state.range(0); ++i) {
+  for (int i = 0; i < size; ++i) {
     test.nodes.emplace_back();
     for (int j = 0; j < i; ++j) {
       if (is_square_num(i + j + 2)) {
@@ -42,12 +13,45 @@ static void BM_PathFind(benchmark::State& state)
       }
     }
   }
+  return test;
+}
+static void BM_Whole(benchmark::State& state)
+{
   for (auto _ : state) {
-    benchmark::DoNotOptimize(test.has_path());
+    auto x = createGraph(state.range(0)).has_path();
   }
-  state.SetComplexityN(state.range(0));
+}
+static void BM_GraphGen(benchmark::State& state)
+{
+  for (auto _ : state) {
+    createGraph(state.range(0));
+  }
+}
+static void BM_PathFindStandard(benchmark::State& state)
+{
+  auto test = createGraph(state.range(0));
+  for (auto _ : state) {
+    benchmark::DoNotOptimize(test.has_path_standard());
+  }
+}
+static void BM_PathFindCMS(benchmark::State& state)
+{
+  auto test = createGraph(state.range(0));
+  for (auto _ : state) {
+    benchmark::DoNotOptimize(test.has_path_cms());
+  }
+}
+
+static void BM_CreateSolver(benchmark::State& state)
+{
+  auto test = createGraph(state.range(0));
+  for (auto _ : state) {
+    benchmark::DoNotOptimize(test.create_solver());
+  }
 }
 
 BENCHMARK(BM_Whole)->RangeMultiplier(2)->Range(1, 32);
 BENCHMARK(BM_GraphGen)->RangeMultiplier(2)->Range(1, 32);
-BENCHMARK(BM_PathFind)->RangeMultiplier(2)->Range(1, 32)->Complexity();
+BENCHMARK(BM_PathFindStandard)->RangeMultiplier(2)->Range(1, 32);
+BENCHMARK(BM_PathFindCMS)->RangeMultiplier(2)->Range(1, 32);
+BENCHMARK(BM_CreateSolver)->RangeMultiplier(2)->Range(1, 32);
