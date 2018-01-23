@@ -1,37 +1,23 @@
 #include "graph.hpp"
-#include "util.hpp"
 #include <benchmark/benchmark.h>
 
-static graph createGraph(int size)
-{
-  graph test;
-  for (int i = 0; i < size; ++i) {
-    test.nodes.emplace_back();
-    for (int j = 0; j < i; ++j) {
-      if (is_square_num(i + j + 2)) {
-        test.add_bi_edge(i, j);
-      }
-    }
-  }
-  return test;
-}
 static void BM_Whole(benchmark::State& state)
 {
   for (auto _ : state) {
-    auto x = createGraph(state.range(0)).has_path();
+    auto x = has_path(createSquareSequenceGraph(static_cast<unsigned int>(state.range(0))));
   }
 }
 static void BM_GraphGen(benchmark::State& state)
 {
   for (auto _ : state) {
-    createGraph(state.range(0));
+    createSquareSequenceGraph(static_cast<unsigned int>(state.range(0)));
   }
 }
 static void BM_PathFindStandard(benchmark::State& state)
 {
-  auto test = createGraph(state.range(0));
+  auto test = createSquareSequenceGraph(static_cast<unsigned int>(state.range(0)));
   for (auto _ : state) {
-    benchmark::DoNotOptimize(test.has_path());
+    benchmark::DoNotOptimize(has_path(test));
   }
 }
 

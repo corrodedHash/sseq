@@ -1,33 +1,18 @@
 #pragma once
-#include <cryptominisat5/cryptominisat.h>
+#include <boost/graph/adjacency_list.hpp>
 #include <optional>
 #include <sstream>
 #include <string>
 #include <vector>
 
-struct graphnode {
-  std::vector<int> neighbors;
-};
+using NumberGraph = boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::property<boost::vertex_index_t, unsigned>>;
 
-struct graph {
-  std::vector<graphnode> nodes;
-  std::optional<std::vector<int>> has_path();
-  void add_bi_edge(int i, int j)
-  {
-    nodes[static_cast<std::vector<int>::size_type>(i)].neighbors.push_back(j);
-    nodes[static_cast<std::vector<int>::size_type>(j)].neighbors.push_back(i);
-  }
+NumberGraph createSquareSequenceGraph(unsigned until);
+void appendSquareSequenceGraph(unsigned new_index, NumberGraph& g);
+std::optional<std::vector<boost::graph_traits<NumberGraph>::vertex_descriptor>> has_path(const NumberGraph& g);
 
-  std::string dump()
-  {
-    std::stringstream ss;
-    for (std::vector<int>::size_type i = 0; i < nodes.size(); ++i) {
-      ss << i + 1 << "\n  ";
-      for (auto j : nodes[i].neighbors) {
-        ss << j + 1 << " ";
-      }
-      ss << "\n";
-    }
-    return ss.str();
-  }
-};
+inline bool is_square_num(unsigned long value)
+{
+  unsigned int root = static_cast<unsigned int>(std::sqrt(value));
+  return (root * root == value);
+}

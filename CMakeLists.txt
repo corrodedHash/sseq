@@ -41,7 +41,8 @@ if (SSEQ_TIDY_CHECK)
   set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*,\
   -google-readability-namespace-comments,-llvm-include-order,\
   -llvm-namespace-comment,-cppcoreguidelines-pro-bounds-*,\
-  -clang-diagnostic-unused-command-line-argument")
+  -clang-diagnostic-unused-command-line-argument,\
+  -cert-err58-cpp")
 endif()
 
 add_subdirectory(lib)

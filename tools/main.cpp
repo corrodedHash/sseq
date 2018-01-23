@@ -1,5 +1,4 @@
 #include "graph.hpp"
-#include "util.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -7,19 +6,18 @@ int main(int argc, char** args)
 {
   (void)argc;
   (void)args;
-  graph test;
-  for (int i = 0; i < 150; ++i) {
-    test.nodes.emplace_back();
-    for (int j = 0; j < i; ++j) {
-      if (is_square_num(i + j + 2)) {
-        test.add_bi_edge(i, j);
-      }
-    }
-    bool a = static_cast<bool>(test.has_path());
+  NumberGraph test;
+  for (unsigned int i = 0; i < 150; ++i) {
+    appendSquareSequenceGraph(i, test);
+    auto a = has_path(test);
     if (a) {
-      std::cout << i + 1 << " ";
+      std::cout << i + 1 << "\n\t";
+      for (auto x : *a) {
+        std::cout << x + 1 << " ";
+      }
+      std::cout << "\n";
     } else {
-      std::cout << "-" << i + 1 << " ";
+      std::cout << "-" << i + 1 << "\n";
     }
     std::cout << "\n";
   }

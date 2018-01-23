@@ -1,37 +1,61 @@
 #include "graph.hpp"
 #include <algorithm>
-#include <cryptominisat5/cryptominisat.h>
+#include <boost/graph/adjacency_iterator.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graph_traits.hpp>
 #include <iostream>
 
-std::optional<std::vector<int>> graph::has_path()
+void appendSquareSequenceGraph(unsigned new_index, NumberGraph& g)
 {
-  std::vector<int> visited;
-  visited.emplace_back(0);
-  while (visited.size() < nodes.size()) {
-    auto& choices = nodes[static_cast<std::vector<int>::size_type>(visited.back())].neighbors;
-    auto next_id_it = std::find_if(std::begin(choices), std::end(choices), [&](int x) { return std::find(std::begin(visited), std::end(visited), x) == std::end(visited); });
-    if (next_id_it != std::end(choices)) {
-      visited.emplace_back(*next_id_it);
-    } else {
-      while (true) {
-        auto faulty_id = visited.back();
-        visited.pop_back();
+  boost::add_vertex(g);
+  for (unsigned j = 0; j < new_index; ++j) {
+    if (is_square_num(j + new_index + 2)) {
+      boost::add_edge(new_index, j, g);
+    }
+  }
+}
 
-        if (visited.empty()) {
-          if (static_cast<std::vector<int>::size_type>(faulty_id) + 1 >= nodes.size()) {
-            return std::nullopt;
-          }
-          visited.emplace_back(faulty_id + 1);
-          break;
-        }
-        auto& new_choices = nodes[static_cast<std::vector<int>::size_type>(visited.back())].neighbors;
-        auto new_next_id_it = std::find_if(std::begin(new_choices), std::end(new_choices), [&](int x) { return (std::find(std::begin(visited), std::end(visited), x) == std::end(visited)) && (x > faulty_id); });
-        if (new_next_id_it != std::end(new_choices)) {
-          visited.emplace_back(*new_next_id_it);
-          break;
-        }
+NumberGraph createSquareSequenceGraph(unsigned until)
+{
+  NumberGraph result;
+  for (unsigned i = 0; i < until; ++i) {
+    boost::add_vertex(result);
+    for (unsigned j = 0; j < i; ++j) {
+      if (is_square_num(j + i + 2)) {
+        boost::add_edge(i, j, result);
       }
     }
   }
-  return visited;
+  return result;
+}
+
+std::optional<std::vector<boost::graph_traits<NumberGraph>::vertex_descriptor>> has_path(const NumberGraph& g)
+{
+  std::vector<std::pair<boost::graph_traits<NumberGraph>::adjacency_iterator, boost::graph_traits<NumberGraph>::adjacency_iterator>> iterator_stack;
+  std::vector<boost::graph_traits<NumberGraph>::vertex_descriptor> visited;
+
+  visited.reserve(boost::num_vertices(g));
+  iterator_stack.reserve(boost::num_vertices(g));
+  for (auto[root, it_end] = boost::vertices(g); root != it_end; ++root) {
+    visited.push_back(*root);
+    iterator_stack.push_back(boost::adjacent_vertices(visited.back(), g));
+    while (!iterator_stack.empty()) {
+      while (iterator_stack.back().first != iterator_stack.back().second) {
+        if (std::find(std::begin(visited), std::end(visited), *iterator_stack.back().first) == std::end(visited)) {
+          visited.push_back(*iterator_stack.back().first);
+          ++iterator_stack.back().first;
+          iterator_stack.push_back(boost::adjacent_vertices(visited.back(), g));
+          break;
+        }
+        ++iterator_stack.back().first;
+      }
+      if (iterator_stack.back().first == iterator_stack.back().second) {
+        visited.pop_back();
+        iterator_stack.pop_back();
+      } else if (visited.size() == boost::num_vertices(g)) {
+        return visited;
+      }
+    }
+  }
+  return std::nullopt;
 }
