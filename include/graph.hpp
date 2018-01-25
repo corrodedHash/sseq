@@ -8,7 +8,7 @@
 using NumberGraph = boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>;
 
 NumberGraph createSquareSequenceGraph(unsigned until);
-void appendSquareSequenceGraph(unsigned new_index, NumberGraph& g);
+void appendSquareSequenceGraph(NumberGraph& g);
 
 inline bool is_square_num(unsigned long value)
 {
@@ -33,6 +33,7 @@ std::optional<std::vector<typename boost::graph_traits<T>::vertex_descriptor>> h
           visited.push_back(*iterator_stack.back().first);
           ++iterator_stack.back().first;
           iterator_stack.push_back(boost::adjacent_vertices(visited.back(), g));
+
           break;
         }
         ++iterator_stack.back().first;

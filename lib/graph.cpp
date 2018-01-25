@@ -6,8 +6,9 @@
 #include <iostream>
 
 
-void appendSquareSequenceGraph(unsigned new_index, NumberGraph& g)
+void appendSquareSequenceGraph(NumberGraph& g)
 {
+  unsigned new_index = boost::num_vertices(g);
   boost::add_vertex(g);
   for (unsigned j = 0; j < new_index; ++j) {
     if (is_square_num(j + new_index + 2)) {
@@ -20,7 +21,7 @@ NumberGraph createSquareSequenceGraph(unsigned until)
 {
   NumberGraph result;
   for (unsigned i = 0; i < until; ++i) {
-    appendSquareSequenceGraph(i, result);
+    appendSquareSequenceGraph(result);
   }
   return result;
 }
