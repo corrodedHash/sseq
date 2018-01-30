@@ -55,13 +55,14 @@ int main(int argc, char** args)
   po::store(po::command_line_parser(argc, args).options(desc).run(), vm);
   po::notify(vm);
 
-  if (vm.count("help")) {
+  if (vm.count("help") != 0) {
     std::cout << desc << "\n";
     return 0;
-  } else if (vm.count("print")) {
+  }
+  if (vm.count("print") != 0) {
     print_graph(start);
   } else {
-    iterate_graph(start, end, vm.count("all") > 0);
+    iterate_graph(start, end, vm.count("all") != 0);
   }
   return 0;
 }
