@@ -15,21 +15,32 @@ static void print_graph(unsigned int size)
   boost::write_graphviz(std::cout, test, printer);
 }
 
-static void iterate_graph(unsigned int start, unsigned int end)
+static void iterate_graph(unsigned int start, unsigned int end, bool all)
 {
   auto test = createSquareSequenceGraph<NumberGraph>(start);
   for (unsigned int i = start; i != end; ++i) {
-    auto a = has_path(test);
-    if (a) {
-      std::cout << boost::num_vertices(test) << "\n  ";
+    HamiltonPathFinder<NumberGraph> finder(test);
+
+    unsigned path_count = 0;
+    auto a = finder.next();
+    std::cout << boost::num_vertices(test) << "\n";
+    while (a) {
+      ++path_count;
+      std::cout << " ";
       for (auto x : *a) {
         std::cout << x + 1 << " ";
       }
       std::cout << "\n";
-    } else {
-      std::cout << "-" << i + 1 << "\n";
+      if (all) {
+        a = finder.next();
+      } else {
+        a = std::nullopt;
+      }
     }
-    std::cout << "\n";
+    if (all) {
+      std::cout
+          << "Found paths: " << path_count << "\n";
+    }
     appendSquareSequenceGraph(test);
   }
 }
@@ -38,7 +49,7 @@ int main(int argc, char** args)
   namespace po = boost::program_options;
   unsigned int start, end;
   po::options_description desc("Allowed options");
-  desc.add_options()("start", po::value<unsigned int>(&start)->default_value(1), "value to start searching at")("end", po::value<unsigned int>(&end)->default_value(0), "stop building sequences at this value")("print", "only print graph")("help", "produce help message");
+  desc.add_options()("start", po::value<unsigned int>(&start)->default_value(1), "value to start searching at")("end", po::value<unsigned int>(&end)->default_value(0), "stop building sequences at this value")("print", "only print graph")("help", "produce help message")("all", "enumerate all paths");
 
   po::variables_map vm;
   po::store(po::command_line_parser(argc, args).options(desc).run(), vm);
@@ -46,13 +57,11 @@ int main(int argc, char** args)
 
   if (vm.count("help")) {
     std::cout << desc << "\n";
-    return 1;
-  }
-
-  if (vm.count("print")) {
+    return 0;
+  } else if (vm.count("print")) {
     print_graph(start);
   } else {
-    iterate_graph(start, end);
+    iterate_graph(start, end, vm.count("all") > 0);
   }
   return 0;
 }

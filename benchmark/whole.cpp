@@ -4,20 +4,23 @@
 static void BM_Whole(benchmark::State& state)
 {
   for (auto _ : state) {
-    auto x = has_path(createSquareSequenceGraph(static_cast<unsigned int>(state.range(0))));
+    auto test = createSquareSequenceGraph<NumberGraph>(static_cast<unsigned int>(state.range(0)));
+    HamiltonPathFinder<NumberGraph> finder(test);
+    auto x = finder.next();
   }
 }
 static void BM_GraphGen(benchmark::State& state)
 {
   for (auto _ : state) {
-    createSquareSequenceGraph(static_cast<unsigned int>(state.range(0)));
+    createSquareSequenceGraph<NumberGraph>(static_cast<unsigned int>(state.range(0)));
   }
 }
 static void BM_PathFindStandard(benchmark::State& state)
 {
-  auto test = createSquareSequenceGraph(static_cast<unsigned int>(state.range(0)));
+  auto test = createSquareSequenceGraph<NumberGraph>(static_cast<unsigned int>(state.range(0)));
   for (auto _ : state) {
-    benchmark::DoNotOptimize(has_path(test));
+    HamiltonPathFinder<NumberGraph> finder(test);
+    benchmark::DoNotOptimize(finder.next());
   }
 }
 

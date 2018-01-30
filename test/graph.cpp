@@ -5,7 +5,8 @@
 TEST_CASE("I guess")
 {
   auto test = createSquareSequenceGraph<NumberGraph>(30);
-  auto x = has_path(test);
+  HamiltonPathFinder<NumberGraph> finder(test);
+  auto x = finder.next();
   REQUIRE(x);
   REQUIRE(x->size() == 30);
   for (decltype(x->size()) i = 0; i < x->size() - 1; ++i) {
