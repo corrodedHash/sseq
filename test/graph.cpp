@@ -4,7 +4,7 @@
 
 TEST_CASE("I guess")
 {
-  NumberGraph test = createSquareSequenceGraph(30);
+  auto test = createSquareSequenceGraph<NumberGraph>(30);
   auto x = has_path(test);
   REQUIRE(x);
   REQUIRE(x->size() == 30);

@@ -8,7 +8,7 @@
 
 static void print_graph(unsigned int size)
 {
-  NumberGraph test = createSquareSequenceGraph(static_cast<unsigned int>(size));
+  auto test = createSquareSequenceGraph<NumberGraph>(static_cast<unsigned int>(size));
   auto printer = [](std::ostream& out, const auto& v) {
     out << "[label=\"" << v + 1 << "\"]";
   };
@@ -17,7 +17,7 @@ static void print_graph(unsigned int size)
 
 static void iterate_graph(unsigned int start, unsigned int end)
 {
-  NumberGraph test = createSquareSequenceGraph(start);
+  auto test = createSquareSequenceGraph<NumberGraph>(start);
   for (unsigned int i = start; i != end; ++i) {
     auto a = has_path(test);
     if (a) {
