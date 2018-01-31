@@ -1,7 +1,5 @@
 template <typename T>
-HamiltonPathFinder<T>::HamiltonPathFinder(const T& graph_)
-    : graph(graph_)
-{
+HamiltonPathFinder<T>::HamiltonPathFinder(const T& graph_) : graph(graph_) {
   visited.reserve(boost::num_vertices(graph));
   iterator_stack.reserve(boost::num_vertices(graph));
   auto it_pair = boost::vertices(graph);
@@ -10,17 +8,19 @@ HamiltonPathFinder<T>::HamiltonPathFinder(const T& graph_)
 }
 
 template <typename T>
-std::optional<std::vector<typename boost::graph_traits<T>::vertex_descriptor>> HamiltonPathFinder<T>::next()
-{
+std::optional<std::vector<typename boost::graph_traits<T>::vertex_descriptor>>
+HamiltonPathFinder<T>::next() {
   while (root_it != root_end) {
     visited.push_back(*root_it);
     iterator_stack.push_back(boost::adjacent_vertices(visited.back(), graph));
     while (!iterator_stack.empty()) {
       while (iterator_stack.back().first != iterator_stack.back().second) {
-        if (std::find(std::begin(visited), std::end(visited), *iterator_stack.back().first) == std::end(visited)) {
+        if (std::find(std::begin(visited), std::end(visited),
+                      *iterator_stack.back().first) == std::end(visited)) {
           visited.push_back(*iterator_stack.back().first);
           ++iterator_stack.back().first;
-          iterator_stack.push_back(boost::adjacent_vertices(visited.back(), graph));
+          iterator_stack.push_back(
+              boost::adjacent_vertices(visited.back(), graph));
 
           break;
         }
@@ -38,12 +38,12 @@ std::optional<std::vector<typename boost::graph_traits<T>::vertex_descriptor>> H
   return std::nullopt;
 }
 template <typename T>
-typename HamiltonPathFinder<T>::iterator HamiltonPathFinder<T>::begin()
-{
-  return HamiltonPathFinder<T>::iterator(*this, HamiltonPathFinder<T>::iterator::CompletionStatus::running);
+typename HamiltonPathFinder<T>::iterator HamiltonPathFinder<T>::begin() {
+  return HamiltonPathFinder<T>::iterator(
+      *this, HamiltonPathFinder<T>::iterator::CompletionStatus::running);
 }
 template <typename T>
-typename HamiltonPathFinder<T>::iterator HamiltonPathFinder<T>::end()
-{
-  return HamiltonPathFinder<T>::iterator(*this, HamiltonPathFinder<T>::iterator::CompletionStatus::finished);
+typename HamiltonPathFinder<T>::iterator HamiltonPathFinder<T>::end() {
+  return HamiltonPathFinder<T>::iterator(
+      *this, HamiltonPathFinder<T>::iterator::CompletionStatus::finished);
 }

@@ -2,12 +2,16 @@
 #include <boost/program_options.hpp>
 #include <iostream>
 
-int main(int argc, char** args)
-{
+int main(int argc, char** args) {
   namespace po = boost::program_options;
   unsigned int start, end;
   po::options_description desc("Allowed options");
-  desc.add_options()("start", po::value<unsigned int>(&start)->default_value(1), "value to start searching at")("end", po::value<unsigned int>(&end)->default_value(0), "stop building sequences at this value")("print", "only print graph")("help", "produce help message")("all", "enumerate all paths")("count", "count paths");
+  desc.add_options()("start", po::value<unsigned int>(&start)->default_value(1),
+                     "value to start searching at")(
+      "end", po::value<unsigned int>(&end)->default_value(0),
+      "stop building sequences at this value")("print", "only print graph")(
+      "help", "produce help message")("all", "enumerate all paths")(
+      "count", "count paths");
 
   po::variables_map vm;
   po::store(po::command_line_parser(argc, args).options(desc).run(), vm);

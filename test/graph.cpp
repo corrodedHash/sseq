@@ -2,14 +2,14 @@
 #include "catch.hpp"
 #include <iostream>
 
-TEST_CASE("I guess")
-{
+TEST_CASE("I guess") {
   auto test = createSquareSequenceGraph<NumberGraph>(30);
   HamiltonPathFinder<NumberGraph> finder(test);
   auto x = finder.next();
   REQUIRE(x);
   REQUIRE(x->size() == 30);
   for (decltype(x->size()) i = 0; i < x->size() - 1; ++i) {
-    REQUIRE(is_square_num(static_cast<unsigned long>((*x)[i] + (*x)[i + 1] + 2)));
+    REQUIRE(
+        is_square_num(static_cast<unsigned long>((*x)[i] + (*x)[i + 1] + 2)));
   }
 }
