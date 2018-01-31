@@ -38,7 +38,7 @@ static void BM_PathFindExhaustive(benchmark::State& state) {
   }
 }
 
-BENCHMARK(BM_Whole)->RangeMultiplier(2)->Range(1, 32);
-BENCHMARK(BM_GraphGen)->RangeMultiplier(2)->Range(1, 32);
-BENCHMARK(BM_PathFindStandard)->RangeMultiplier(2)->Range(1, 32);
-BENCHMARK(BM_PathFindExhaustive)->RangeMultiplier(2)->Range(1, 32);
+BENCHMARK(BM_Whole)->RangeMultiplier(2)->Range(8, 32);
+BENCHMARK(BM_GraphGen)->RangeMultiplier(2)->Range(8, 32);
+BENCHMARK(BM_PathFindStandard)->RangeMultiplier(2)->Range(8, 32);
+BENCHMARK(BM_PathFindExhaustive)->RangeMultiplier(2)->Range(8, 32);
