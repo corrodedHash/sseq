@@ -4,6 +4,7 @@
 static void BM_Whole(benchmark::State& state)
 {
   for (auto _ : state) {
+    (void)_;
     auto test = createSquareSequenceGraph<NumberGraph>(static_cast<unsigned int>(state.range(0)));
     HamiltonPathFinder<NumberGraph> finder(test);
     auto x = finder.next();
@@ -12,6 +13,7 @@ static void BM_Whole(benchmark::State& state)
 static void BM_GraphGen(benchmark::State& state)
 {
   for (auto _ : state) {
+    (void)_;
     createSquareSequenceGraph<NumberGraph>(static_cast<unsigned int>(state.range(0)));
   }
 }
@@ -19,6 +21,7 @@ static void BM_PathFindStandard(benchmark::State& state)
 {
   auto test = createSquareSequenceGraph<NumberGraph>(static_cast<unsigned int>(state.range(0)));
   for (auto _ : state) {
+    (void)_;
     HamiltonPathFinder<NumberGraph> finder(test);
     benchmark::DoNotOptimize(finder.next());
   }
