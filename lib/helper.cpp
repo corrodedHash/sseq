@@ -29,7 +29,7 @@ static void increment_graph(
 static void iterate_graph_intern(HamiltonPathFinder<NumberGraph>& finder) {
   auto path = finder.next();
   if (!path) {
-    std::cout << "  -";
+    std::cout << "  -\n";
   } else {
     std::cout << "  ";
     for (auto& vertex : *path) {
