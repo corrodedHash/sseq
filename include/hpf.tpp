@@ -40,10 +40,10 @@ std::optional<std::vector<typename boost::graph_traits<T>::vertex_descriptor>> H
 template <typename T>
 typename HamiltonPathFinder<T>::iterator HamiltonPathFinder<T>::begin()
 {
-  return HamiltonPathFinder<T>::iterator(*this, false);
+  return HamiltonPathFinder<T>::iterator(*this, HamiltonPathFinder<T>::iterator::CompletionStatus::running);
 }
 template <typename T>
 typename HamiltonPathFinder<T>::iterator HamiltonPathFinder<T>::end()
 {
-  return HamiltonPathFinder<T>::iterator(*this, true);
+  return HamiltonPathFinder<T>::iterator(*this, HamiltonPathFinder<T>::iterator::CompletionStatus::finished);
 }

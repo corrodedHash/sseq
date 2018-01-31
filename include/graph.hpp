@@ -31,7 +31,9 @@ class HamiltonPathFinder {
 template <typename T>
 class HamiltonPathFinder<T>::iterator {
   public:
-  iterator(HamiltonPathFinder& hpf_, bool finished_);
+  enum class CompletionStatus { finished,
+    running };
+  iterator(HamiltonPathFinder& hpf_, CompletionStatus finished_);
   iterator operator++();
   iterator operator++(int);
   const std::vector<typename boost::graph_traits<T>::vertex_descriptor>& operator*();

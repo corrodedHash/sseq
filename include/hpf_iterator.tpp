@@ -1,7 +1,7 @@
 template <typename T>
-HamiltonPathFinder<T>::iterator::iterator(HamiltonPathFinder& hpf_, bool finished_)
+HamiltonPathFinder<T>::iterator::iterator(HamiltonPathFinder& hpf_, CompletionStatus finished_)
     : hpf(hpf_)
-    , finished(finished_)
+    , finished(finished_ == CompletionStatus::finished)
 {
   if (!finished) {
     ++(*this);
