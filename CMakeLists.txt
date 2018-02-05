@@ -32,6 +32,7 @@ string (APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -pedantic \
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   string (APPEND CMAKE_CXX_FLAGS " -fcolor-diagnostics")
   string (APPEND CMAKE_CXX_FLAGS " -Wextra-semi -Weverything -Wshorten-64-to-32")
+  string (APPEND CMAKE_CXX_FLAGS_RELEASE " -Ofast")
   string (APPEND CMAKE_CXX_FLAGS_DEBUG " -fno-limit-debug-info")
 else()
   message(STATUS "Not compiling with clang, disabling colored diagnostics")
